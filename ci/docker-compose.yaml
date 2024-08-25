@@ -1,0 +1,104 @@
+services:
+  db-auth:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/postgres-auth.Dockerfile
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d auth" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+
+  db-magnetogram:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/postgres-magnetogram.Dockerfile
+    ports:
+      - 5431:5432
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U admin -d magnetogram" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: "1"
+          memory: 2G
+
+  redis-tokens:
+    build:
+      context: .
+      dockerfile: ./dockerfiles/redis.Dockerfile
+    environment:
+      REDIS_HOST: "redis-tokens"
+      REDIS_PORT: 6379
+    ports:
+      - 6379:6379
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  auth:
+    build:
+      context: ../backend/auth
+      dockerfile: ./src/docker/Dockerfile
+    depends_on:
+      db-auth:
+        condition: service_healthy
+      redis-tokens:
+        condition: service_healthy
+    ports:
+      - 7771:7771
+
+  integration:
+    build:
+      context: ../backend/integration
+      dockerfile: ./src/docker/Dockerfile
+    depends_on:
+      db-magnetogram:
+        condition: service_healthy
+    ports:
+      - 7774:7774
+
+  bff:
+    build:
+      context: ../backend/bff
+      dockerfile: ./src/docker/Dockerfile
+    depends_on:
+      - auth
+      - integration
+    ports:
+      - 7777:7777
+
+  reporter:
+    build:
+      context: ../backend/reporter
+      dockerfile: ./src/docker/Dockerfile
+    depends_on:
+      - auth
+      - integration
+    ports:
+      - 7772:7772
+
+  processor:
+    build:
+      context: ../backend/processor
+      dockerfile: ./src/docker/Dockerfile
+    depends_on:
+      - auth
+      - integration
+    ports:
+      - 7773:7773
+volumes:
+    db-auth:
+    db-magnetogram:
