@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "image processor"
+version = "1.0.0"
+description = "Обработчик изображений"
+authors = ["vladushka2000"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pydantic = "^2.8.2"
+pydantic-settings = "^2.4.0"
+fastapi = "^0.112.1"
+uvicorn = "^0.30.6"
+dependency-injector = "^4.41.0"
+sqlalchemy = "^2.0.32"
+asyncpg = "^0.29.0"
+numpy = "^2.1.0"
+opencv-python = "^4.10.0.84"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
