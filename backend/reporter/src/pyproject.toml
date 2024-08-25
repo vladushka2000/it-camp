@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "reporter"
+version = "1.0.0"
+description = "Сервис создания отчетов"
+authors = ["vladushka2000"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.112.1"
+pydantic-settings = "^2.4.0"
+sqlalchemy = "^2.0.32"
+python-dotenv = "^1.0.1"
+dependency-injector = "^4.41.0"
+uvicorn = "^0.30.6"
+asyncpg = "^0.29.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
