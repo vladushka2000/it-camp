@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "bff"
+version = "1.0.0"
+description = "API gateway для приложения"
+authors = ["vladushka2000"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.112.0"
+pydantic-settings = "^2.4.0"
+python-dotenv = "^1.0.1"
+uvicorn = "^0.30.5"
+aiohttp = "^3.10.3"
+dependency-injector = "^4.41.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
